@@ -1,0 +1,277 @@
+:root {
+  --primary: #ec4899; /* Changed to a festive birthday pink */
+  --primary-hover: #db2777;
+  --background: #fdf2f8;
+  --surface: #ffffff;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --success: #10b981;
+  --error: #ef4444;
+  --radius: 16px;
+  --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.game-container {
+  background: var(--surface);
+  width: 100%;
+  max-width: 500px;
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+header {
+  text-align: center;
+  width: 100%;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.hint {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  background: #f1f5f9;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.gallow-container {
+  height: 130px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+svg {
+  height: 100%;
+}
+
+line, circle {
+  stroke: var(--text);
+  stroke-width: 4;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.figure-part {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.figure-part.visible {
+  opacity: 1;
+}
+
+.word-display {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 42px;
+}
+
+.letter-slot {
+  font-size: 1.5rem;
+  font-weight: 700;
+  width: 32px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid var(--text-muted);
+  text-transform: uppercase;
+}
+
+.letter-slot.revealed {
+  border-bottom-color: var(--primary);
+  animation: pop 0.2s ease-out;
+}
+
+.keyboard {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.key {
+  background: #f1f5f9;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--text);
+  transition: all 0.1s ease;
+}
+
+.key:disabled {
+  opacity: 0.3;
+}
+
+.key.correct {
+  background: var(--success);
+  color: white;
+}
+
+.key.wrong {
+  background: var(--error);
+  color: white;
+}
+
+/* Modal overlay */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-content {
+  background: var(--surface);
+  padding: 24px;
+  border-radius: var(--radius);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+#modal-image-container {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.victory-img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-top: 12px;
+  margin-bottom: 16px; /* A small bottom gap above the button */
+  animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal p {
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* QR Scanner Block Screen Styling */
+.lock-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #0f172a;
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 20;
+  text-align: center;
+}
+
+.lock-screen.active {
+  display: flex;
+}
+
+.lock-content h2 {
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.lock-content p {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  max-width: 320px;
+  line-height: 1.6;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.8); }
+  100% { transform: scale(1); }
+}
+
+/* Hidden host administration zone */
+.host-reset-zone {
+  width: 100%;
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+#hidden-reset-btn {
+  font-size: 0.75rem;
+  color: #cbd5e1; /* Very light gray to blend into the background */
+  cursor: pointer;
+  user-select: none;
+  font-weight: 400;
+  transition: color 0.2s;
+}
+
+#hidden-reset-btn:active {
+  color: var(--primary); /* Flashes pink briefly when double-tapped */
+}

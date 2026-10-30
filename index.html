@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Treasure Hunt!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="game-container">
+    <header>
+      <h1 id="game-title">Birthday Quest 🎁</h1>
+      <div class="hint" id="hint-text">Clue: Loading...</div>
+    </header>
+
+    <div class="gallow-container">
+      <svg viewBox="0 0 100 100">
+        <line x1="10" y1="95" x2="90" y2="95" />
+        <line x1="30" y1="95" x2="30" y2="10" />
+        <line x1="30" y1="10" x2="70" y2="10" />
+        <line x1="70" y1="10" x2="70" y2="25" />
+        
+        <circle cx="70" cy="32" r="7" class="figure-part" />
+        <line x1="70" y1="39" x2="70" y2="60" class="figure-part" />
+        <line x1="70" y1="45" x2="55" y2="52" class="figure-part" />
+        <line x1="70" y1="45" x2="85" y2="52" class="figure-part" />
+        <line x1="70" y1="60" x2="55" y2="75" class="figure-part" />
+        <line x1="70" y1="60" x2="85" y2="75" class="figure-part" />
+      </svg>
+    </div>
+
+    <div class="word-display" id="word-display"></div>
+    <div class="keyboard" id="keyboard"></div>
+  </div>
+
+  <!-- Special QR Gate Message (Locks game until they scan the physical QR) -->
+  <div id="qr-lock-screen" class="lock-screen">
+    <div class="lock-content">
+      <h2>🔒 Game Locked!</h2>
+      <p>Go to the location shown in the photo, find your gift, and **scan the QR code** attached to it to unlock your next puzzle word!</p>
+    </div>
+  </div>
+
+  <div class="modal" id="result-modal">
+    <div class="modal-content">
+      <h2 id="modal-title">You Win!</h2>
+      <p id="modal-desc"></p> <!-- Text description now comes first -->
+      <div id="modal-image-container"></div> <!-- Winning image layout is now underneath -->
+      <button class="btn" id="restart-btn">Play Again</button>
+    </div>
+  </div>
+
+    <!-- Hidden reset link for the game host -->
+  <div class="host-reset-zone">
+    <span id="hidden-reset-btn">Reset button (just for Kat)</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
