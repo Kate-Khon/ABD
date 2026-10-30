@@ -68,6 +68,13 @@ const lossMessagesPool = [
   }
 ];
 
+const birthdayMessage = `
+      <div style="text-align:center; padding: 20px;">
+        <h2>🎉 100% COMPLETION 🎉</h2>
+        <p style="margin-top:15px; color:#64748b;">
+You successfully swept every map sector, completely outsmarted the hangman, and unlocked all secret birthday loot drops. <br> <br> <b> Averey, have an awesome birthday! </b> <br> <br> With love,<br> Kat ❤️</p>
+      </div>`;
+
 // Browser memory management for game progress
 let completedWords = JSON.parse(localStorage.getItem("completedWords")) || [];
 let activeWordList = fullWordList.filter(item => !completedWords.includes(item.word));
@@ -96,12 +103,7 @@ const scannedCode = urlParams.get('unlock');
 
 function initGame() {
   if (completedWords.length === fullWordList.length) {
-    document.querySelector(".game-container").innerHTML = `
-      <div style="text-align:center; padding: 20px;">
-        <h2>🎉 100% COMPLETION 🎉</h2>
-        <p style="margin-top:15px; color:#64748b;">
-You successfully swept every map sector, completely outsmarted the hangman, and unlocked all secret birthday loot drops. <br> <br> <b> Averey, have an awesome birthday! </b> <br> <br> With love,<br> Kat ❤️</p>
-      </div>`;
+    document.querySelector(".game-container").innerHTML = birthdayMessage;
     return;
   }
 
@@ -246,7 +248,19 @@ function showModal(title, desc, imageUrl, buttonText) {
 }
 
 restartBtn.addEventListener("click", () => {
+  // 1. First, smoothly close the victory notification card
+  modal.classList.remove("active");
+
+  // 2. Calculate if that was the absolute last word in the list
   activeWordList = fullWordList.filter(item => !completedWords.includes(item.word));
+
+  // 3. If no words are left, turn the game board into the birthday card!
+  if (completedWords.length === fullWordList.length) {
+    document.querySelector(".game-container").innerHTML = birthdayMessage;
+    return;
+  }
+
+  // 4. If there are still words left, advance to the next round setup
   initGame();
 });
 
