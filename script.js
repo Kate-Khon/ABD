@@ -68,18 +68,30 @@ const lossMessagesPool = [
   }
 ];
 
-const birthdayMessage = `
-      <div style="text-align:center; padding: 20px;">
-        <h2>🎉 100% COMPLETION 🎉</h2>
-        <p style="margin-top:15px; color:#64748b;">
-You successfully swept every map sector, completely outsmarted the hangman, and unlocked all secret birthday loot drops. <br> <br> <b> Averey, have an awesome birthday! </b> <br> <br> With love,<br> Kat ❤️</p>
-      </div>`;
+// ==========================================
+// 1. QUEST CAMPAIGN GRAND FINALE CONFIGURATION
+// ==========================================
+const GRAND_FINALE_TEMPLATE = `
+  <div style="text-align:center; padding: 20px;">
+    <h2>🎉 100% COMPLETION! 🎉</h2>
+    <p style="margin-top:15px; color:#64748b; line-height:1.6; font-size:1.1rem;">
+      You cleared every map sector, completely outsmarted the hangman, and unlocked all secret birthday drops.
+    </p>
+    <p style="margin-top:20px; font-weight:700; color:var(--text); font-size:1.2rem;">
+      Averey, have an awesome birthday!
+    </p>
+    <p style="margin-top:25px; font-size:1rem; color:var(--text-muted);">
+      With love, <br><span style="font-weight:700; color:var(--primary); font-size:1.1rem;">Kat ❤️</span>
+    </p>
+  </div>
+`;
 
-// Browser memory management for game progress
+
+// ==========================================
+// 4. STORAGE & STATE MANAGEMENT
+// ==========================================
 let completedWords = JSON.parse(localStorage.getItem("completedWords")) || [];
 let activeWordList = fullWordList.filter(item => !completedWords.includes(item.word));
-
-// Track shown win indexes inside browser local memory
 let shownWinIndexes = JSON.parse(localStorage.getItem("shownWinIndexes")) || [];
 
 let currentWordObj;
@@ -101,9 +113,12 @@ const qrLockScreen = document.getElementById("qr-lock-screen");
 const urlParams = new URLSearchParams(window.location.search);
 const scannedCode = urlParams.get('unlock');
 
+// ==========================================
+// 5. MAIN CORE GAME RUNNERS
+// ==========================================
 function initGame() {
   if (completedWords.length === fullWordList.length) {
-    document.querySelector(".game-container").innerHTML = birthdayMessage;
+    showGrandFinale();
     return;
   }
 
@@ -118,7 +133,8 @@ function initGame() {
     qrLockScreen.classList.add("active");
     return;
   }
- qrLockScreen.classList.remove("active");
+
+  qrLockScreen.classList.remove("active");
   guessedLetters = new Set();
   wrongGuesses = 0;
 
@@ -126,18 +142,9 @@ function initGame() {
   modal.classList.remove("active");
   figureParts.forEach(part => part.classList.remove("visible"));
 
-  // Render Word Slots (Handles spaces naturally)
   wordDisplayElement.innerHTML = currentWordObj.word
     .split("")
-    .map(letter => {
-      if (letter === " ") {
-        // Creates an invisible, non-bordered gap for spaces
-        return `<span class="letter-slot" style="border-bottom: none; width: 16px;">&nbsp;</span>`;
-      } else {
-        // Keeps the regular bordered line for letters
-        return `<span class="letter-slot"></span>`;
-      }
-    })
+    .map(letter => letter === " " ? `<span class="letter-slot" style="border-bottom: none; width: 16px;">&nbsp;</span>` : `<span class="letter-slot"></span>`)
     .join("");
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -180,13 +187,11 @@ function updateWordDisplay() {
   });
 }
 
-// 3. STRICTLY NON-REPEATING WIN HANDLING
+// ==========================================
+// 6. WIN / LOSS SELECTIONS
+// ==========================================
 function checkWinCondition() {
-  // Check win state, automatically skipping spaces over in the validation check
-  const isWon = currentWordObj.word
-    .split("")
-    .every(letter => letter === " " || guessedLetters.has(letter));
-    
+  const isWon = currentWordObj.word.split("").every(letter => letter === " " || guessedLetters.has(letter));
   if (isWon) {
     completedWords.push(currentWordObj.word);
     localStorage.setItem("completedWords", JSON.stringify(completedWords));
@@ -211,7 +216,7 @@ function checkWinCondition() {
       showModal(
         chosenWinMessage.title, 
         `<span style="display:block; margin-bottom:12px; font-weight:600; color:var(--text);">${chosenWinMessage.descTemplate}</span>
-         <p style="font-style:italic; background:#fff1f2; padding:10px; border-radius:8px; border-left:4px solid var(--primary); margin-bottom:12px;">"${currentWordObj.hint}"</p>`, 
+         <p style="font-style:italic; background:#fff1f2; padding:10px; border-radius:8px; border-left:4px solid var(--primary); margin-bottom:12px;">"${currentWordObj.word}"</p>`, 
         currentWordObj.image,
         "I'm on my way!"
       );
@@ -219,8 +224,6 @@ function checkWinCondition() {
   }
 }
 
-
-// 4. RANDOM LOSS HANDLING (Allowed to repeat freely)
 function checkLossCondition() {
   if (wrongGuesses >= maxGuesses) {
     const randomLossIndex = Math.floor(Math.random() * lossMessagesPool.length);
@@ -232,41 +235,46 @@ function checkLossCondition() {
   }
 }
 
-function showModal(title, desc, imageUrl, buttonText) {
-  modalTitle.textContent = title;
-  modalDesc.innerHTML = desc;
-  restartBtn.textContent = buttonText;
-  modalImageContainer.innerHTML = "";
-  if (imageUrl) {
-    const imgElement = document.createElement("img");
-    imgElement.src = imageUrl;
-    imgElement.className = "victory-img";
-    modalImageContainer.appendChild(imgElement);
-  }
+// ==========================================
+// 7. INTERACTIVE DOM EVENTS & MODALS
+// ==========================================
+  function showModal(title, desc, imageUrl, buttonText) {
+    modalTitle.textContent = title;
+    modalDesc.innerHTML = desc;
+    restartBtn.textContent = buttonText;
+    modalImageContainer.innerHTML = "";
+    
+    if (imageUrl) {
+      const imgElement = document.createElement("img");
+      imgElement.src = imageUrl;
+      imgElement.className = "victory-img";
+      modalImageContainer.appendChild(imgElement);
+    }
 
   modal.classList.add("active");
-}
+  }
+    
+  restartBtn.addEventListener("click", () => {
+  
+    modal.classList.remove("active");
+    activeWordList = fullWordList.filter(item => !completedWords.includes(item.word));
+  
+    if (completedWords.length === fullWordList.length) {
+      showGrandFinale();
+      return;
+    }
 
-restartBtn.addEventListener("click", () => {
-  // 1. First, smoothly close the victory notification card
-  modal.classList.remove("active");
-
-  // 2. Calculate if that was the absolute last word in the list
-  activeWordList = fullWordList.filter(item => !completedWords.includes(item.word));
-
-  // 3. If no words are left, turn the game board into the birthday card!
-  if (completedWords.length === fullWordList.length) {
-    document.querySelector(".game-container").innerHTML = birthdayMessage;
-    return;
+    initGame();
+  });
+    function showGrandFinale() {
+    document.querySelector(".game-container").innerHTML = GRAND_FINALE_TEMPLATE;
   }
 
-  // 4. If there are still words left, advance to the next round setup
-  initGame();
-});
-
-// Admin System Settings Control Zone
+// 8. Reset Button
+// ==========================================
 const hiddenResetBtn = document.getElementById("hidden-reset-btn");
 hiddenResetBtn.addEventListener("dblclick", () => {
+
   if (confirm("Reset everything?")) {
     localStorage.clear();
     window.location.reload();
@@ -277,6 +285,7 @@ let lastTap = 0;
 hiddenResetBtn.addEventListener("touchend", (e) => {
   const currentTime = new Date().getTime();
   const tapLength = currentTime - lastTap;
+
   if (tapLength < 300 && tapLength > 0) {
     if (confirm("Reset everything?")) {
       localStorage.clear();
@@ -284,7 +293,9 @@ hiddenResetBtn.addEventListener("touchend", (e) => {
     }
     e.preventDefault();
   }
+  
   lastTap = currentTime;
 });
 
+// Mount the game instance
 initGame();

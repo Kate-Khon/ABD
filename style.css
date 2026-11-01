@@ -217,6 +217,25 @@ line, circle {
   width: 100%;
 }
 
+/* Secondary button style for the lock screen photo view */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  /* transition: background 0.2s; */
+  width: 100%;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
 /* QR Scanner Block Screen Styling */
 .lock-screen {
   position: fixed;
@@ -257,19 +276,25 @@ line, circle {
 
 /* Hidden host administration zone */
 .host-reset-zone {
-  width: 100%;
+  position: fixed;
+  bottom: 16px;
+  left: 0;
+  right: 0;
   text-align: center;
-  margin-top: 40px;
-  margin-bottom: 10px;
+  z-index: 30; /* Higher than the QR lock screen's z-index of 20 */
+  pointer-events: all;
 }
 
 #hidden-reset-btn {
   font-size: 0.75rem;
-  color: #cbd5e1; /* Very light gray to blend into the background */
+  color: #64748b; /* Made it slightly darker gray so it's readable on both white and dark backgrounds */
   cursor: pointer;
   user-select: none;
-  font-weight: 400;
+  font-weight: 500;
   transition: color 0.2s;
+  background: rgba(255, 255, 255, 0.05); /* Adds a very faint bubble so it stays readable */
+  padding: 4px 8px;
+  border-radius: 4px;
 }
 
 #hidden-reset-btn:active {
