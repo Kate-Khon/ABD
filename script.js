@@ -293,8 +293,8 @@ restartBtn.addEventListener("click", () => {
 });
 
 function showGrandFinale() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
   document.querySelector(".game-container").innerHTML = GRAND_FINALE_TEMPLATE;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ==========================================
