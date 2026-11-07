@@ -312,6 +312,7 @@ line, circle {
   background: rgba(255, 255, 255, 0.05); /* Adds a very faint bubble so it stays readable */
   padding: 4px 8px;
   border-radius: 4px;
+  touch-action: auto; /* Overrides the global touch-action: pan-y
 }
 
 #hidden-reset-btn:active {
