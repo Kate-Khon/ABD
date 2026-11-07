@@ -137,7 +137,7 @@ function initGame() {
     if (currentUnlockedImage) {
       viewPhotoBtn.classList.add("active");
     }
-    
+
     return;
   }
 
@@ -298,6 +298,7 @@ function showGrandFinale() {
 
 // ==========================================
 const hiddenResetBtn = document.getElementById("hidden-reset-btn");
+
 hiddenResetBtn.addEventListener("dblclick", () => {
 
   if (confirm("Reset everything?")) {
@@ -306,6 +307,20 @@ hiddenResetBtn.addEventListener("dblclick", () => {
   }
   e.preventDefault();
 });
+
+// let lastTap = 0;
+// hiddenResetBtn.addEventListener("touchend", (e) => {
+//   const currentTime = new Date().getTime();
+//   const tapLength = currentTime - lastTap;
+//   if (tapLength < 300 && tapLength > 0) {
+//     if (confirm("Reset everything?")) {
+//       localStorage.clear();
+//       window.location.reload();
+//     }
+//     e.preventDefault();
+//   }
+//   lastTap = currentTime;
+// });
 
 // Mount the game instance
 initGame();

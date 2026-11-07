@@ -297,7 +297,7 @@ line, circle {
   margin-top: auto;      
   padding-top: 40px;
   position: relative;  
-  z-index: 30;
+  z-index: 9999;
   pointer-events: all;
 }
 
