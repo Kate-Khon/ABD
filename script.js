@@ -3,7 +3,7 @@ const fullWordList = [
   {  
     word: "lizards", 
     hint: "It possessed the ancient secrets of eternal joy and never-ending splendor… the trick was to surrender to the flow.” Don't let your heavy metal armor make you sink to the bottom of the raging river!", 
-    image: "images/kitchen.png", 
+    image: "images/1.jpg", 
     qrPassword: "" 
   },
   
@@ -11,7 +11,7 @@ const fullWordList = [
   { 
     word: "mother grizzly", 
     hint: "The classic old-school battle recruiter for the WATER attribute. Her sacrifice allows you to immediately search your deck for any aquatic monster with 1500 or less Attack and place it directly onto the field.", 
-    image: "images/cake.jpg", 
+    image: "images/2.jpg", 
     qrPassword: "unicorn7" 
   },
   
@@ -19,7 +19,7 @@ const fullWordList = [
   { 
     word: "kjeldahl", 
     hint: "Look at this, look at this. A ...-style recovery flask. 800 milliliters. Very rare.", 
-    image: "images/bedroom.jpg", 
+    image: "images/3.jpg", 
     qrPassword: "blue9balloon" 
   },
   
@@ -27,7 +27,7 @@ const fullWordList = [
   { 
     word: "boneitis", 
     hint: `He had the suits, the power, and the sleazy 1980s business tactics to completely reshape Planet Express. But right at the height of his corporate victory, his past catches up to him for one final line: "My only regret... is that I have... "`, 
-    image: "images/cake.jpg", 
+    image: "images/4.jpg", 
     qrPassword: "cake48secret" 
   }
 ];
