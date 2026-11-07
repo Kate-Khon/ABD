@@ -97,6 +97,7 @@ let shownWinIndexes = JSON.parse(localStorage.getItem("shownWinIndexes")) || [];
 let currentWordObj;
 let guessedLetters;
 let wrongGuesses;
+let currentUnlockedImage = "";
 const maxGuesses = 6;
 
 const wordDisplayElement = document.getElementById("word-display");
@@ -109,6 +110,7 @@ const modalImageContainer = document.getElementById("modal-image-container");
 const modalDesc = document.getElementById("modal-desc");
 const restartBtn = document.getElementById("restart-btn");
 const qrLockScreen = document.getElementById("qr-lock-screen");
+const viewPhotoBtn = document.getElementById("view-photo-btn");
 
 const urlParams = new URLSearchParams(window.location.search);
 const scannedCode = urlParams.get('unlock');
@@ -193,6 +195,7 @@ function updateWordDisplay() {
 function checkWinCondition() {
   const isWon = currentWordObj.word.split("").every(letter => letter === " " || guessedLetters.has(letter));
   if (isWon) {
+    currentUnlockedImage = currentWordObj.image;
     completedWords.push(currentWordObj.word);
     localStorage.setItem("completedWords", JSON.stringify(completedWords));
     localStorage.setItem("needsQrUnlock", "true");
@@ -238,39 +241,56 @@ function checkLossCondition() {
 // ==========================================
 // 7. INTERACTIVE DOM EVENTS & MODALS
 // ==========================================
-  function showModal(title, desc, imageUrl, buttonText) {
+function showModal(title, desc, imageUrl, buttonText, isPhotoOnly = false) {
+  // If photo only, clear text entirely and hide background decoration styles
+  if (isPhotoOnly) {
+    modalTitle.textContent = "";
+    modalDesc.innerHTML = "";
+    modalDesc.style.display = "none";
+  } else {
     modalTitle.textContent = title;
     modalDesc.innerHTML = desc;
-    restartBtn.textContent = buttonText;
-    modalImageContainer.innerHTML = "";
-    
-    if (imageUrl) {
-      const imgElement = document.createElement("img");
-      imgElement.src = imageUrl;
-      imgElement.className = "victory-img";
-      modalImageContainer.appendChild(imgElement);
-    }
+    modalDesc.style.display = "block"; // Restore layout defaults for regular wins
+  }
+  
+  restartBtn.textContent = buttonText;
+  modalImageContainer.innerHTML = "";
+  
+  if (imageUrl) {
+    const imgElement = document.createElement("img");
+    imgElement.src = imageUrl;
+    imgElement.className = "victory-img";
+    modalImageContainer.appendChild(imgElement);
+  }
 
   modal.classList.add("active");
+}
+
+// Opens a simple modal layout displaying only the photo asset
+viewPhotoBtn.addEventListener("click", () => {
+  if (currentUnlockedImage) {
+    showModal("", "", currentUnlockedImage, "Got it ☺️", true);
   }
+});
+
+
     
-  restartBtn.addEventListener("click", () => {
+restartBtn.addEventListener("click", () => {  
+  modal.classList.remove("active");
+  activeWordList = fullWordList.filter(item => !completedWords.includes(item.word));
   
-    modal.classList.remove("active");
-    activeWordList = fullWordList.filter(item => !completedWords.includes(item.word));
-  
-    if (completedWords.length === fullWordList.length) {
-      showGrandFinale();
-      return;
-    }
-
-    initGame();
-  });
-    function showGrandFinale() {
-    document.querySelector(".game-container").innerHTML = GRAND_FINALE_TEMPLATE;
+  if (completedWords.length === fullWordList.length) {
+    showGrandFinale();
+    return;
   }
 
-// 8. Reset Button
+  initGame();
+});
+
+function showGrandFinale() {
+  document.querySelector(".game-container").innerHTML = GRAND_FINALE_TEMPLATE;
+}
+
 // ==========================================
 const hiddenResetBtn = document.getElementById("hidden-reset-btn");
 hiddenResetBtn.addEventListener("dblclick", () => {
@@ -279,23 +299,24 @@ hiddenResetBtn.addEventListener("dblclick", () => {
     localStorage.clear();
     window.location.reload();
   }
+  e.preventDefault();
 });
 
-let lastTap = 0;
-hiddenResetBtn.addEventListener("touchend", (e) => {
-  const currentTime = new Date().getTime();
-  const tapLength = currentTime - lastTap;
+// let lastTap = 0;
+// hiddenResetBtn.addEventListener("touchend", (e) => {
+//   const currentTime = new Date().getTime();
+//   const tapLength = currentTime - lastTap;
 
-  if (tapLength < 300 && tapLength > 0) {
-    if (confirm("Reset everything?")) {
-      localStorage.clear();
-      window.location.reload();
-    }
-    e.preventDefault();
-  }
+//   if (tapLength < 300 && tapLength > 0) {
+//     if (confirm("Reset everything?")) {
+//       localStorage.clear();
+//       window.location.reload();
+//     }
+//     e.preventDefault();
+//   }
   
-  lastTap = currentTime;
-});
+//   lastTap = currentTime;
+// });
 
 // Mount the game instance
 initGame();
