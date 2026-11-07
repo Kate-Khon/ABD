@@ -163,6 +163,8 @@ function initGame() {
   document.querySelectorAll(".key").forEach(button => {
     button.addEventListener("click", () => handleGuess(button.dataset.letter));
   });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function handleGuess(letter) {
