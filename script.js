@@ -298,30 +298,29 @@ function showGrandFinale() {
 }
 
 // ==========================================
+// 8. RESET THE GAME BUTTON
+// ==========================================
 const hiddenResetBtn = document.getElementById("hidden-reset-btn");
+let lastResetPointerTime = 0;
 
-hiddenResetBtn.addEventListener("dblclick", () => {
-
-  if (confirm("Reset everything?")) {
-    localStorage.clear();
-    window.location.reload();
+// Tracks both real mouse clicks and physical finger touch strikes instantly
+hiddenResetBtn.addEventListener("pointerup", (e) => {
+  const currentPointerTime = new Date().getTime();
+  const pointerTapGap = currentPointerTime - lastResetPointerTime;
+  
+  // Triggers if two sequential taps occur within 300ms
+  if (pointerTapGap < 300 && pointerTapGap > 0) {
+    e.preventDefault();
+    
+    if (confirm("Are you sure you want to completely wipe game progress and restart the hunt from the beginning?")) {
+      localStorage.clear();
+      alert("System memory wiped! The game will now restart from Word 1.");
+      window.location.reload();
+    }
   }
-  e.preventDefault();
+  
+  lastResetPointerTime = currentPointerTime;
 });
-
-// let lastTap = 0;
-// hiddenResetBtn.addEventListener("touchend", (e) => {
-//   const currentTime = new Date().getTime();
-//   const tapLength = currentTime - lastTap;
-//   if (tapLength < 300 && tapLength > 0) {
-//     if (confirm("Reset everything?")) {
-//       localStorage.clear();
-//       window.location.reload();
-//     }
-//     e.preventDefault();
-//   }
-//   lastTap = currentTime;
-// });
 
 // Mount the game instance
 initGame();

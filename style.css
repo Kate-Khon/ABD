@@ -297,7 +297,7 @@ line, circle {
   margin-top: auto;      
   padding-top: 40px;
   position: relative;  
-  z-index: 9999;
+  z-index: 30;
   pointer-events: all;
 }
 
@@ -312,7 +312,7 @@ line, circle {
   background: rgba(255, 255, 255, 0.05); /* Adds a very faint bubble so it stays readable */
   padding: 4px 8px;
   border-radius: 4px;
-  touch-action: manipulation; /* Blocks pinch-zooms, but forces mobile browsers to process fast taps/double-clicks */
+  touch-action: none; 
 }
 
 #hidden-reset-btn:active {
