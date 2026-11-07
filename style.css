@@ -271,6 +271,14 @@ line, circle {
   line-height: 1.6;
 }
 
+.view-photo-btn {
+  display: none;
+}
+
+.view-photo-btn.active {
+  display: inline-block;
+}
+
 @keyframes pop {
   0% { transform: scale(0.8); }
   100% { transform: scale(1); }

@@ -133,6 +133,11 @@ function initGame() {
 
   if (localStorage.getItem("needsQrUnlock") === "true") {
     qrLockScreen.classList.add("active");
+    
+    if (currentUnlockedImage) {
+      viewPhotoBtn.classList.add("active");
+    }
+    
     return;
   }
 
@@ -301,22 +306,6 @@ hiddenResetBtn.addEventListener("dblclick", () => {
   }
   e.preventDefault();
 });
-
-// let lastTap = 0;
-// hiddenResetBtn.addEventListener("touchend", (e) => {
-//   const currentTime = new Date().getTime();
-//   const tapLength = currentTime - lastTap;
-
-//   if (tapLength < 300 && tapLength > 0) {
-//     if (confirm("Reset everything?")) {
-//       localStorage.clear();
-//       window.location.reload();
-//     }
-//     e.preventDefault();
-//   }
-  
-//   lastTap = currentTime;
-// });
 
 // Mount the game instance
 initGame();
