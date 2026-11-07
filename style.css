@@ -312,7 +312,7 @@ line, circle {
   background: rgba(255, 255, 255, 0.05); /* Adds a very faint bubble so it stays readable */
   padding: 4px 8px;
   border-radius: 4px;
-  touch-action: auto; /* Blocks pinch-zooms, but forces mobile browsers to process fast taps/double-clicks */
+  touch-action: manipulation; /* Blocks pinch-zooms, but forces mobile browsers to process fast taps/double-clicks */
 }
 
 #hidden-reset-btn:active {
